@@ -12,9 +12,12 @@ class TodoListViewController: UITableViewController {
 
     var itemArray = ["Find Mike", "Buy Eggos", "Destroy Demogorgon"]
     
+    let defaults = UserDefaults.standard
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        if let  items = defaults.array(forKey: "TodoListArray") as? [String] {
+            itemArray = items
+        }
         
         
         
@@ -39,15 +42,15 @@ class TodoListViewController: UITableViewController {
         //print(itemArray[indexPath.row])
         
         
-        if tableView.cellForRow(at: <#T##IndexPath#>)?.accessoryType == .checkmark {
-            tableView.cellForRow(at: <#T##IndexPath#>)?.accessoryType = .none
+        if tableView.cellForRow(at: indexPath)?.accessoryType == .checkmark {
+            tableView.cellForRow(at: indexPath)?.accessoryType = .none
         } else {
-            tableView.cellForRow(at: <#T##IndexPath#>)?.accessoryType = .checkmark
+            tableView.cellForRow(at: indexPath)?.accessoryType = .checkmark
         }
         
         
         
-        tableView.deselectRow(at: IndexPath, animated: true)
+        tableView.deselectRow(at: indexPath, animated: true)
         
     
         
@@ -58,13 +61,13 @@ class TodoListViewController: UITableViewController {
         var textField = UITextField()
         
     
-   let alert = UIAlertController(title: "Add New Todoey item", message: "<#T##String?#>", preferredStyle: .alert)
+   let alert = UIAlertController(title: "Add New Todoey item", message: "", preferredStyle: .alert)
     
         let action = UIAlertAction(title: "Add item", style: .default) { (action) in
             // what wil happen once the user clicks the Add item button on our UIAlert
          
             self.itemArray.append(textField.text!)
-            
+            self.defaults.set(self.itemArray, forKey: "TodoListArray")
             self.tableView.reloadData()
         }
         alert.addTextField { (alertTextField) in
